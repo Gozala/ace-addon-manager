@@ -17,7 +17,9 @@
     "test": "./test"
   },
   "dependencies": {
-    "test": ">=0.0.10"
+    "test": ">=0.0.10",
+    "ace": ">=0.1.6",
+    "light-traits": ">=0.1."
   },
   "main": "./lib/ace-addon-manager.js",
   "engines": {
