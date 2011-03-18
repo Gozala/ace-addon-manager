@@ -41,67 +41,41 @@ define (require, exports, module) ->
   'use strict'
 
   # Adds ES5 functionality to the browsers that don't have it built-in.
-  # TODO: Replace this with -> https://github.com/kriskowal/es5-shim/blob/master/es5-shim.js 
+  # TODO: Replace this with -> https://github.com/kriskowal/es5-shim/blob/master/es5-shim.js
   require 'pilot/fixoldbrowsers'
   ace = require 'ace/ace'
-  { launch } = require 'ace/launcher'
-  
-  launch {}
-  ###
-  `ace.create({
-  // This is an order in which plug-ins are going to be
-  // loaded so if your plug-in A depends on B it should
-  // appear earlier in the array.
-  plugins: [
-    {   name: 'logger',
-        install: function (data) {
-            var env = data.env;
-            env.on("plugin:startup", function(event) {
-                console.log(event.type, event.plugin.name, event.plugin);
-            });
-            env.on("type:install", function(event) {
-                console.log(event.type, event.descriptor.name, event.descriptor);
-            });
-            env.on("setting:install", function(event) {
-                console.log(event.type, event.setting.name, event.setting);
-            });
-        }
-    },
-    require("pilot/index"),
-    require("pilot/canon"),
-    require("ace-addon-manager/type-manager"),
-    // For the moment settings-manager should at the top
-    // so that settings will get picked up.
-    require("ace-addon-manager/settings-manager"),
+  ace.create
+    ###
+    This is an order in which plug-ins are going to be
+    loaded so if your plug-in A depends on B it should
+    appear earlier in the array.
+    ###
+    plugins: [
+      # Just plugin used for debugging
+        name: 'logger'
+        install: ({ env }) ->
+          env.on 'plugin:startup', ({ type, plugin }) ->
+            console.log type, plugin.name, plugin
+          env.on 'type:install', ({ type, descriptor }) ->
+            console.log type, descriptor.name, descriptor
+          env.on 'setting:install', ({ type, setting }) ->
+            console.log type, setting.name, setting
 
-    exports,
-    require("cockpit/index"),
-    require("ace/defaults"),
+      # Must be installed before any other plugin that depends on it.
+      require 'pilot/canon'
+      require 'ace-addon-manager/type-manager'
+      require 'ace-addon-manager/settings-manager'
+      require 'ace-addon-manager/theme-manager'
+      require 'ace-addon-manager/mode-manager'
+      require 'ace-addon-manager/command-manager'
 
-    // themes
-    require("ace/theme-manager"),
-    require("ace/theme/twilight"),
-    require("ace/theme/textmate"),
-    require("ace/theme/clouds_midnight"),
-    require("ace/theme/cobalt"),
-    require("ace/theme/dawn"),
-    require("ace/theme/eclipse"),
-    require("ace/theme/idle_fingers"),
-    require("ace/theme/kr_theme"),
-    require("ace/theme/mono_industrial"),
-    require("ace/theme/monokai"),
-    require("ace/theme/pastel_on_dark"),
-    // modes
-    require("ace/mode-manager"),
-    require("ace/mode/javascript"),
-    require("ace/mode/css"),
-    require("ace/mode/html"),
-    require("ace/mode/xml"),
-    require("ace/mode/python"),
-    require("ace/mode/php"),
-    require("ace/mode/java"),
-    require("ace/mode/ruby"),
-    require("ace/mode/text")
-  ]
-})`
-###
+      require 'ace-addon-manager/launcher'
+
+      require 'ace/modes'
+      require 'ace/themes'
+
+      require 'pilot-adapter'
+
+      # require 'cockpit/index'
+      # require 'ace/defaults'
+    ]
