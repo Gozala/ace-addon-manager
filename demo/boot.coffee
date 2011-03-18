@@ -45,8 +45,13 @@ require
     'light-traits': '../support/light-traits/amd/light-traits'
     'ace-addon-manager': '../lib'
     ### Adding overlays ###
-    'pilot/environment': '../lib/pilot/environment'
-    'ace/ace': '../lib/ace/ace'
     'ace/launcher': '../support/ace/demo/demo'
+    'ace/ace': '../overlays/ace/ace'
+    'ace/modes': '../overlays/ace/modes'
+    'ace/themes': '../overlays/ace/themes'
+
+    'pilot/environment': '../overlays/pilot/environment'
+    'pilot-adapter': '../overlays/pilot/index'
+    'pilot/canon': '../overlays/pilot/canon'
 
 , [ 'embed' ], 'embed'
